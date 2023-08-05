@@ -32,8 +32,26 @@
           </div>';
         }
         else{
-            $sql="SELECT * FROM `contact_us_test` WHERE location = 'mumbai'";
+            $sql="SELECT * FROM `contact_us_test` WHERE location = 'mirzapur'";
             $res=mysqli_query($conn,$sql);
+
+            $sql2="UPDATE `contact_us_test` SET location = 'Mumbai' WHERE location = 'Kolkata'";
+
+            $res2=mysqli_query($conn,$sql2);
+            $aff=mysqli_affected_rows($conn);
+            echo '<div class="alert alert-success" role="alert">
+            Effected Rows:- '.$aff.'
+          </div>';
+          echo "<br>";
+
+            if(!$res2){
+              echo "You Have An Error:- ".mysqli_error($conn);
+            }
+            else{
+              echo '<div class="alert alert-success" role="alert">
+                        Updated Successfully
+                      </div><br>';
+            }
 
             if(!$res){
               echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
