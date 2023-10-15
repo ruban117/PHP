@@ -139,7 +139,7 @@
           <a class="nav-link" href="#">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Logout</a>
+          <a class="nav-link" href="logout.php">Logout</a>
         </li>
       </ul>
     </div>
@@ -147,7 +147,9 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <h4 class="text-center text-danger font-weight-normal my-3">Welcome Name</h4>
+        <h4 class="text-center text-danger font-weight-normal my-3">Welcome <?php
+        session_start();
+        echo $_SESSION['name'];?></h4>
       </div>
     </div>
     <div class="row">
