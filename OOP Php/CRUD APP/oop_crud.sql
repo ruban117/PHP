@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2023 at 08:13 PM
+-- Generation Time: Oct 18, 2023 at 07:41 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -40,7 +40,32 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `name`, `email`, `password`, `created_at`) VALUES
-(1, 'Ruban Pathak', 'rubanpathak706@gmail.com', 'aruda4344', '2023-10-15 12:31:47');
+(1, 'Ruban Pathak', 'rubanpathak706@gmail.com', 'aruda4344', '2023-10-15 12:31:47'),
+(5, 'Soumita Das', 'soumitad991@gmail.com', 'somurubu', '2023-10-15 18:49:23'),
+(6, 'Souvik Banerjee', 'souvikbanerjee241@gmail.com', 'Souvik@123', '2023-10-16 07:19:20'),
+(7, 'Sourav Goswami', 'souravgoswami586@gmail.com', '1234', '2023-10-16 07:34:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `normalusers`
+--
+
+CREATE TABLE `normalusers` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `normalusers`
+--
+
+INSERT INTO `normalusers` (`id`, `name`, `email`, `password`, `image`) VALUES
+(3, 'Ruban Pathak', 'rubanpathak706@gmail.com', 'aruda4344', 'images/Screenshot (189).png'),
+(5, 'Soumita Das', 'soumitad991@gmail.com', 'somurubu', 'images/Screenshot (183).png');
 
 -- --------------------------------------------------------
 
@@ -63,7 +88,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `f_name`, `l_name`, `email`, `contact`) VALUES
 (45, 'Ruban', 'Pathak', 'rubanpathak706@gmail.com', '6289814242'),
 (46, 'Soumita', 'Das', 'soumitad991@gmail.com', '9883760672'),
-(48, 'Saah Rukh (King Khan)', 'Khan', 'saahrukh@gmail.com', '7541236989');
+(49, 'Salman', 'Khan', 'salmankhan@gmail.com', '7854123698'),
+(50, 'Deepika', 'Padukon', 'deepika@yahoo.com', '5632147899');
 
 --
 -- Indexes for dumped tables
@@ -73,6 +99,12 @@ INSERT INTO `users` (`id`, `f_name`, `l_name`, `email`, `contact`) VALUES
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `normalusers`
+--
+ALTER TABLE `normalusers`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -91,13 +123,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `normalusers`
+--
+ALTER TABLE `normalusers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
