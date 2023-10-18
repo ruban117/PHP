@@ -57,6 +57,18 @@
             return rand(1000, 9999);
     }
 
+    public function ForgetPassword($email,$pass){
+        $sql = "SELECT id FROM admin WHERE email = :email";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $id=$row['id'];
+        $sql2="UPDATE admin SET password = :pass WHERE id= :id";
+        $stmt2=$this->conn->prepare($sql2);
+        $res=$stmt2->execute(["pass"=>$pass,"id"=>$id]);
+        return true;
+    }
+
     
 
     public function smtp_mailer($to,$subject, $msg){

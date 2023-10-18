@@ -1,0 +1,117 @@
+<?php
+    include('smtp/PHPMailerAutoload.php');
+    class NormalPeopleDb{
+        private $dsn="mysql:host=localhost; dbname=oop_crud";
+        private $user="root";
+        private $pass="";
+        public $conn;
+
+        public function __construct(){
+            try{
+                $this->conn=new PDO($this->dsn,$this->user,$this->pass);
+                //echo "Connected";
+            }
+            catch(PDOException $e){
+                echo $e->getMessage();
+            }
+        }
+
+        public function Insert($name, $email, $pass, $image) {
+            $allowed_extensions = array('jpg', 'jpeg', 'png', 'gif');
+            $file_extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+        
+            if (!in_array($file_extension, $allowed_extensions)) {
+                return "Invalid file format. Only JPG, JPEG, PNG, and GIF images are allowed.";
+            }
+        
+            $upload_path = "images/";
+            $target_file = $upload_path . basename($image['name']);
+        
+            if (move_uploaded_file($image['tmp_name'], $target_file)) {
+                // Image uploaded successfully, now insert data into the database
+                $sql = "INSERT INTO normalusers (name, email, password, image) VALUES(:name, :email, :pass, :image)";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->execute(['name' => $name, 'email' => $email, 'pass' => $pass, 'image' => $target_file]);
+        
+                return "Data and image uploaded successfully!";
+            } else {
+                return "Error uploading image.";
+            }
+        }
+        public function Exists($email) {
+            $sql = "SELECT COUNT(*) FROM normalusers WHERE email = :email"; // Remove the single quotes
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['email' => $email]); // Use an associative array to bind the parameter
+            $no_of_users = $stmt->fetchColumn(); // Use fetchColumn() to get the count
+            return $no_of_users;
+        }
+
+        public function Login($email,$pass) {
+            $sql = "SELECT COUNT(*) FROM normalusers WHERE email = :email AND password = :pass"; // Remove the single quotes
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['email' => $email, 'pass' => $pass]); // Use an associative array to bind the parameter
+            $no_of_users = $stmt->fetchColumn(); // Use fetchColumn() to get the count
+            return $no_of_users;
+        }
+
+        public function getName($email){
+            $sql = "SELECT name FROM normalusers WHERE email = :email";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['email' => $email]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+            if ($result) {
+                return $result['name'];
+            } else {
+                return null; // or handle the case where no user is found
+            }
+        }
+
+        public function getUserByEmail($email) {
+            $sql = "SELECT * FROM `normalusers` WHERE email = :email";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['email' => $email]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        public function ForgetPassword($email,$pass){
+            $sql = "SELECT id FROM normalusers WHERE email = :email";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute(['email' => $email]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $id=$row['id'];
+            $sql2="UPDATE normalusers SET password = :pass WHERE id= :id";
+            $stmt2=$this->conn->prepare($sql2);
+            $res=$stmt2->execute(["pass"=>$pass,"id"=>$id]);
+            return true;
+        }
+        public function smtp_mailer($to,$subject, $msg){
+            $mail = new PHPMailer(); 
+            $mail->IsSMTP(); 
+            $mail->SMTPAuth = true; 
+            $mail->SMTPSecure = 'tls'; 
+            $mail->Host = "smtp.gmail.com";
+            $mail->Port = 587; 
+            $mail->IsHTML(true);
+            $mail->CharSet = 'UTF-8'; 
+            $mail->Username = "rubanpathak706@gmail.com";
+            $mail->Password = "tzxfzlpddnnaxlbx";
+            $mail->SetFrom("bostirchelepocha@gmail.com");
+            $mail->Subject = $subject;
+            $mail->Body =$msg;
+            $mail->AddAddress($to);
+            $mail->SMTPOptions=array('ssl'=>array(
+                'verify_peer'=>false,
+                'verify_peer_name'=>false,
+                'allow_self_signed'=>false
+            ));
+            if(!$mail->Send()){
+                echo $mail->ErrorInfo;
+            }else{
+                return 'Sent';
+            }
+        }
+    }
+        
+?>

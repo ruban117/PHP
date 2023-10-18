@@ -3,3 +3,9 @@ User  clicked the button and triggered event:
 User  clicked the button and triggered event: 
 User  clicked the button and triggered event: 
 User  clicked the button and triggered event: 
+
+
+femail
+npass
+ncnfpass
+fpassword(submit btn)

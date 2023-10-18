@@ -1,43 +1,27 @@
 <?php
-  require_once 'Admindb.php';
+    require_once 'NormalPeopleRegdb.php';
+    $err_msg='';
+    $has_err=false;
+    if(isset($_POST['sub'])){
+        $email=$_POST['email'];
+        $pass=$_POST['password'];
 
-  $db = new AdminDb();
-  $login = false;
-  $loginError = '';
-  $success='';
-  
-  if (isset($_POST['sub'])) {
-      $email = $_POST['email'];
-      $pass = $_POST['password'];
-  
-      if ($db->Login($email, $pass) == 1) {
-          $login = true;
-          session_start();
-          $_SESSION['loggedin'] = true;
-          $_SESSION['name'] = $db->getName($email);
-          header("Location: index.php");
-      } else {
-          $loginError = 'Invalid email or password. Please try again.';
-      }
-  }
-
-
-  if(isset($_POST['fpassword'])){
-    $femail=$_POST['femail'];
-    $fpass=$_POST['npass'];
-    $nconfpass=$_POST['ncnfpass'];
-
-    if($fpass==$nconfpass){
-      $db->ForgetPassword($femail,$fpass);
-      $success="Password Has Been Changed Successfully";
-    }else{
-      $loginError = 'Please Check Your Password';
+        $db=new NormalPeopleDb();
+        if($db->Login($email,$pass) == 1){
+            session_start();
+            $_SESSION['loggedin']=true;
+            $_SESSION['name']=$db->getName($email);
+            $_SESSION['email']=$email;
+            //$_SESSION['img']=$db->getImage($email);
+            header("Location: Welcome.php");
+        }
+        else{
+            $has_err=true;
+            $err_msg='Invalid Login Creadentials';
+        }
     }
-  }
+
 ?>
-
-
-
 
 
 <!doctype html>
@@ -49,7 +33,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 
-    <title>Admin Login</title>
+    <title>Log In Here</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
@@ -65,32 +49,15 @@
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="AdminLogin.php">Login</a>
+              <a class="nav-link" href="NormalPeopleSignIn.php">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="AdminSignup.php">Signup</a>
+                <a class="nav-link" href="NormalPeopleReg.php">Signup</a>
               </li>
           </ul>
         </div>
       </nav>
       <div class="container my-4">
-      <?php if (!$login) {
-            if (!empty($loginError)) {
-                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Error!</strong> ' . $loginError . '
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>';
-            }else{
-              echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>Success!</strong> ' .$success. '
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>';
-            }
-        } ?>
         <!-------------------------Forget Password Modal------------------------------------>
         <div class="modal fade" id="addModal">
           <div class="modal-dialog modal-dialog-centered">
@@ -129,6 +96,14 @@
           </div>
         </div>
         <form method="post" action="">
+            <?php if($has_err){?>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> <?php echo $err_msg; ?>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <?php }?>
           <div class="form-group">
             <label for="email">Email address</label>
             <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp">
